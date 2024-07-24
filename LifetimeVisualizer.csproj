@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Net.Leksi.Util</RootNamespace>
@@ -9,47 +9,41 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <!--<NuspecFile>$(AssemblyName).nuspec</NuspecFile>-->
+    <IsPackable>true</IsPackable>
+    <PackageOutputPath>../nuget.local</PackageOutputPath>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    
     <Title>$(AssemblyName)</Title>
     <Authors>leksiq</Authors>
     <Copyright>Алексей Юрьевич Захаров &lt;leksi@leksi.net&gt;, 2024</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/Leksiqq/LifetimeVisualizer/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Leksiqq/LifetimeVisualizer</RepositoryUrl>
-    <IsPackable>true</IsPackable>
-    <Version>1.0.0</Version>
+    <Version>1.0.42</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>lifetime garbage-collection memory-leaks</PackageTags>
     <Description>An utility for checking the release of objects.</Description>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageOutputPath>../nuget.local</PackageOutputPath>
     <PackageReleaseNotes>
+      1.0.1    Bugs fixed
     </PackageReleaseNotes>
+    
 
   </PropertyGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
+    <ProjectReference Include="..\LifetimeObserver\Library\LifetimeObserver.csproj" />
     <ProjectReference Include="..\LifetimeObserver\Library\LifetimeObserver.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Release'">
     <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.1.*" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)'=='Debug'">
-    <None Update="..\EchoConsole1\bin\$(Configuration)\$(TargetFramework)\Microsoft.Extensions.Configuration.Abstractions.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="..\EchoConsole1\bin\$(Configuration)\$(TargetFramework)\Microsoft.Extensions.Configuration.CommandLine.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="..\EchoConsole1\bin\$(Configuration)\$(TargetFramework)\Microsoft.Extensions.Configuration.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="..\EchoConsole1\bin\$(Configuration)\$(TargetFramework)\Microsoft.Extensions.Primitives.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <Content Include="echoconsole.cmd">
+      <Pack>True</Pack>
+      <PackagePath>\contentFiles</PackagePath>
+    </Content>
     <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -58,5 +52,8 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EchoConsole\EchoConsole.csproj" />
   </ItemGroup>
 </Project>

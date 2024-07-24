@@ -38,8 +38,10 @@ public static class LifetimeVisualizer
                 }
                 Process echo = new();
                 AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
-                echo.StartInfo.FileName = "EchoConsole";
+                echo.StartInfo.FileName = "Net.Leksi.EchoConsole.exe";
                 echo.StartInfo.Arguments = $"--title \"LifetimeVisualizer: {Assembly.GetEntryAssembly()!.GetName()}\" --socket-path {s_socketPath}";
+                //echo.StartInfo.FileName = "cmd";
+                //echo.StartInfo.Arguments = $"/k echoconsole.cmd --title \"LifetimeVisualizer: {Assembly.GetEntryAssembly()!.GetName()}\" --socket-path {s_socketPath}";
                 echo.StartInfo.UseShellExecute = true;
                 echo.Exited += Echo_Exited;
                 echo.Start();
