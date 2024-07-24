@@ -20,7 +20,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/Leksiqq/LifetimeVisualizer/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Leksiqq/LifetimeVisualizer</RepositoryUrl>
-    <Version>1.0.42</Version>
+    <Version>1.0.44</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>lifetime garbage-collection memory-leaks</PackageTags>
     <Description>An utility for checking the release of objects.</Description>
@@ -40,10 +40,10 @@
     <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.1.*" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Release'">
-    <Content Include="echoconsole.cmd">
+    <None Include="bin\$(Configuration)\$(TargetFramework)\Net.Leksi.EchoConsole.runtimeconfig.json">
       <Pack>True</Pack>
       <PackagePath>\contentFiles</PackagePath>
-    </Content>
+    </None>
     <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
