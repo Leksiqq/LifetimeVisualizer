@@ -1,1 +1,0 @@
-@Net.Leksi.EchoConsole.exe %*

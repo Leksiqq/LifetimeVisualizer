@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Net.Leksi.Util</RootNamespace>
     <AssemblyName>Net.Leksi.LifetimeVisualizer</AssemblyName>
+    <EchoConsole>bin\$(Configuration)\$(TargetFramework)\EchoConsole\</EchoConsole>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -20,40 +21,90 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/Leksiqq/LifetimeVisualizer/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Leksiqq/LifetimeVisualizer</RepositoryUrl>
-    <Version>1.0.44</Version>
+    <Version>1.1.4</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>lifetime garbage-collection memory-leaks</PackageTags>
     <Description>An utility for checking the release of objects.</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      1.0.1    Bugs fixed
+      1.1.0    Bugs fixed
     </PackageReleaseNotes>
     
 
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
     <ProjectReference Include="..\LifetimeObserver\Library\LifetimeObserver.csproj" />
-    <ProjectReference Include="..\LifetimeObserver\Library\LifetimeObserver.csproj" />
+    <ProjectReference Include="..\EchoConsole\EchoConsole.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Release'">
     <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.1.*" />
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)'=='Release'">
-    <None Include="bin\$(Configuration)\$(TargetFramework)\Net.Leksi.EchoConsole.runtimeconfig.json">
-      <Pack>True</Pack>
-      <PackagePath>\contentFiles</PackagePath>
-    </None>
-    <None Include="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EchoConsole\EchoConsole.csproj" />
-  </ItemGroup>
+  <Target Name="Copy1" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
+    <PropertyGroup>
+      <From>..\EchoConsole\bin\$(Configuration)\$(TargetFramework)\</From>
+    </PropertyGroup>
+    <ItemGroup>
+      <FilesToCopy Include="$(From)Net.Leksi.EchoConsole.runtimeconfig.json" />
+      <FilesToCopy Include="$(From)Net.Leksi.EchoConsole.dll" />
+      <FilesToCopy Include="$(From)Net.Leksi.EchoConsole.exe" />
+      <FilesToCopy Include="$(From)Microsoft.Extensions.Configuration.Abstractions.dll" />
+      <FilesToCopy Include="$(From)Microsoft.Extensions.Configuration.dll" />
+      <FilesToCopy Include="$(From)Microsoft.Extensions.Configuration.CommandLine.dll" />
+      <FilesToCopy Include="$(From)Microsoft.Extensions.Primitives.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(EchoConsole)" />
+    <ItemGroup>
+      <None Include="$(EchoConsole)Net.Leksi.EchoConsole.runtimeconfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="$(EchoConsole)Net.Leksi.EchoConsole.exe">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="$(EchoConsole)Net.Leksi.EchoConsole.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="$(EchoConsole)Microsoft.Extensions.Configuration.Abstractions.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="$(EchoConsole)Microsoft.Extensions.Configuration.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="$(EchoConsole)Microsoft.Extensions.Configuration.CommandLine.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="$(EchoConsole)Microsoft.Extensions.Primitives.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="Net.Leksi.LifetimeVisualizer.targets">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>True</Pack>
+        <PackagePath>build\</PackagePath>
+      </None>
+      <None Include="README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+      <None Include="LICENSE">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
+  </Target>
 </Project>

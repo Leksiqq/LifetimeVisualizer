@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Folder>EchoConsole/</Folder>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Net.Leksi.EchoConsole.runtimeconfig.json">
+      <Link>$(Folder)Net.Leksi.EchoConsole.runtimeconfig.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Net.Leksi.EchoConsole.exe">
+      <Link>$(Folder)Net.Leksi.EchoConsole.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Net.Leksi.EchoConsole.dll">
+      <Link>$(Folder)Net.Leksi.EchoConsole.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Configuration.Abstractions.dll">
+      <Link>$(Folder)Microsoft.Extensions.Configuration.Abstractions.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Configuration.dll">
+      <Link>$(Folder)Microsoft.Extensions.Configuration.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Configuration.CommandLine.dll">
+      <Link>$(Folder)Microsoft.Extensions.Configuration.CommandLine.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Primitives.dll">
+      <Link>$(Folder)Microsoft.Extensions.Primitives.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
