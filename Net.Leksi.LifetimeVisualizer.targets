@@ -6,31 +6,31 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Net.Leksi.EchoConsole.runtimeconfig.json">
       <Link>$(Folder)Net.Leksi.EchoConsole.runtimeconfig.json</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Net.Leksi.EchoConsole.exe">
       <Link>$(Folder)Net.Leksi.EchoConsole.exe</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Net.Leksi.EchoConsole.dll">
       <Link>$(Folder)Net.Leksi.EchoConsole.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Configuration.Abstractions.dll">
       <Link>$(Folder)Microsoft.Extensions.Configuration.Abstractions.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Configuration.dll">
       <Link>$(Folder)Microsoft.Extensions.Configuration.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Configuration.CommandLine.dll">
       <Link>$(Folder)Microsoft.Extensions.Configuration.CommandLine.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Microsoft.Extensions.Primitives.dll">
       <Link>$(Folder)Microsoft.Extensions.Primitives.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>

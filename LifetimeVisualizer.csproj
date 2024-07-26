@@ -12,7 +12,7 @@
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <!--<NuspecFile>$(AssemblyName).nuspec</NuspecFile>-->
     <IsPackable>true</IsPackable>
-    <PackageOutputPath>../nuget.local</PackageOutputPath>
+    <PackageOutputPath>../../nuget.local</PackageOutputPath>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     
     <Title>$(AssemblyName)</Title>
@@ -21,7 +21,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/Leksiqq/LifetimeVisualizer/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Leksiqq/LifetimeVisualizer</RepositoryUrl>
-    <Version>1.1.4</Version>
+    <Version>1.1.9</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>lifetime garbage-collection memory-leaks</PackageTags>
     <Description>An utility for checking the release of objects.</Description>
@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Release'">
-    <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.1.*" />
+    <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.2.*" />
   </ItemGroup>
   <Target Name="Copy1" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
     <PropertyGroup>
@@ -58,42 +58,42 @@
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(EchoConsole)" />
     <ItemGroup>
       <None Include="$(EchoConsole)Net.Leksi.EchoConsole.runtimeconfig.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="$(EchoConsole)Net.Leksi.EchoConsole.exe">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="$(EchoConsole)Net.Leksi.EchoConsole.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="$(EchoConsole)Microsoft.Extensions.Configuration.Abstractions.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="$(EchoConsole)Microsoft.Extensions.Configuration.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="$(EchoConsole)Microsoft.Extensions.Configuration.CommandLine.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="$(EchoConsole)Microsoft.Extensions.Primitives.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>
       <None Include="Net.Leksi.LifetimeVisualizer.targets">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <Pack>True</Pack>
         <PackagePath>build\</PackagePath>
       </None>

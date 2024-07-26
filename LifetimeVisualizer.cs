@@ -14,7 +14,7 @@ public static class LifetimeVisualizer
     private static string s_socketPath = null!;
     public static void Start(LifetimeObserver lifetimeObserver)
     {
-        if (lifetimeObserver != null)
+        if (lifetimeObserver != null && lifetimeObserver.IsEnabled)
         {
             s_lifetimeObserver = lifetimeObserver;
             if (!s_running)
