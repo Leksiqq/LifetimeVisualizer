@@ -21,13 +21,14 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/Leksiqq/LifetimeVisualizer/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Leksiqq/LifetimeVisualizer</RepositoryUrl>
-    <Version>1.1.9</Version>
+    <Version>1.2.4</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>lifetime garbage-collection memory-leaks</PackageTags>
     <Description>An utility for checking the release of objects.</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
       1.1.0    Bugs fixed
+      1.2.0    Watermark count added
     </PackageReleaseNotes>
     
 

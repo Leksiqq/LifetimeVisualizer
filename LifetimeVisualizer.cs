@@ -84,10 +84,14 @@ public static class LifetimeVisualizer
             switch (e.Kind)
             {
                 case LifetimeEventKind.Created:
-                    Interlocked.Increment(ref ch._incCount);
+                    ++ch._incCount;
+                    if(ch._incCount - ch._decCount > ch._maxCount)
+                    {
+                        ch._maxCount = ch._incCount - ch._decCount;
+                    }
                     break;
                 case LifetimeEventKind.Finalized:
-                    Interlocked.Increment(ref ch._decCount);
+                    ++ch._decCount;
                     break;
             };
         }
@@ -102,7 +106,11 @@ public static class LifetimeVisualizer
     {
         string data = string.Join('\n', s_counts.Select(item =>
         {
-            string line = string.Format($"{{0,-{s_maxNameLen}}}\t+{{1}}\t-{{2}}\t{{3}}", item.Key, item.Value._incCount, item.Value._decCount, item.Value._incCount - item.Value._decCount);
+            string line = string.Format(
+                $"{{0,-{s_maxNameLen}}}\t+{{1}}\t-{{2}}\t={{3}}\t<{{4}}", 
+                item.Key, item.Value._incCount, item.Value._decCount, 
+                item.Value._incCount - item.Value._decCount, item.Value._maxCount
+            );
             return $"{line}";
         })) + "\n";
 #if !NO_SOCKET
@@ -124,4 +132,5 @@ internal class CountHolder
 {
     internal int _incCount = 0;
     internal int _decCount = 0;
+    internal int _maxCount = 0;
 }
