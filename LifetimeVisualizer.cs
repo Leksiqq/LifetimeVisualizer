@@ -4,38 +4,40 @@ using System.Reflection;
 using System.Text;
 
 namespace Net.Leksi.Util;
-public static class LifetimeVisualizer
+public class LifetimeVisualizer
 {
-    private static Dictionary<Type, CountHolder> s_counts = [];
-    private static bool s_running = false;
-    private static int s_maxNameLen = 0;
-    private static LifetimeObserver? s_lifetimeObserver = null;
-    private static Socket s_socket = null!;
-    private static string s_socketPath = null!;
-    public static void Start(LifetimeObserver lifetimeObserver)
+    public static LifetimeVisualizer Instance = new();
+    private Dictionary<Type, CountHolder> _counts = [];
+    private bool _running = false;
+    private int _maxNameLen = 0;
+    private LifetimeObserver? _lifetimeObserver = null;
+    private Socket _socket = null!;
+    private string _socketPath = null!;
+    private LifetimeVisualizer() { }
+    public void Start(LifetimeObserver lifetimeObserver)
     {
         if (lifetimeObserver != null && lifetimeObserver.IsEnabled)
         {
-            s_lifetimeObserver = lifetimeObserver;
-            if (!s_running)
+            _lifetimeObserver = lifetimeObserver;
+            if (!_running)
             {
-                s_running = true;
-                lock (s_counts)
+                _running = true;
+                lock (_counts)
                 {
-                    foreach (Type type in s_lifetimeObserver!.GetTracedTypes())
+                    foreach (Type type in _lifetimeObserver!.GetTracedTypes())
                     {
-                        s_counts.Add(type, new CountHolder());
-                        if (s_maxNameLen < type.FullName!.Length)
+                        _counts.Add(type, new CountHolder());
+                        if (_maxNameLen < type.FullName!.Length)
                         {
-                            s_maxNameLen = type.FullName.Length;
+                            _maxNameLen = type.FullName.Length;
                         }
                     }
                 }
-                s_lifetimeObserver.NextTracedCount += S_lifetimeObserver_NextTracedCount;
+                _lifetimeObserver.NextTracedCount += S_lifetimeObserver_NextTracedCount;
 #if !NO_SOCKET
-                s_socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-                s_socketPath = Path.GetTempFileName();
-                File.Delete(s_socketPath);
+                _socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
+                _socketPath = Path.GetTempFileName();
+                File.Delete(_socketPath);
                 Process echo = new();
                 AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 #if DEBUG
@@ -43,44 +45,44 @@ public static class LifetimeVisualizer
 #else
                 echo.StartInfo.FileName = Path.Combine("EchoConsole", "Net.Leksi.EchoConsole.exe");
 #endif
-                echo.StartInfo.Arguments = $"--title \"LifetimeVisualizer: {Assembly.GetEntryAssembly()!.GetName()}\" --socket-path {s_socketPath}";
+                echo.StartInfo.Arguments = $"--title \"LifetimeVisualizer: {Assembly.GetEntryAssembly()!.GetName()}\" --socket-path {_socketPath}";
                 echo.StartInfo.UseShellExecute = true;
                 echo.Exited += Echo_Exited;
                 echo.Start();
-                while(!File.Exists(s_socketPath))
+                while(!File.Exists(_socketPath))
                 {
                     Thread.Sleep(10);
                 }
-                s_socket.Connect(new UnixDomainSocketEndPoint(s_socketPath));
+                _socket.Connect(new UnixDomainSocketEndPoint(_socketPath));
 #endif
                 Write();
-                s_lifetimeObserver.LifetimeEventOccured += LifetimeObserver_LifetimeEventOccured; 
+                _lifetimeObserver.LifetimeEventOccured += LifetimeObserver_LifetimeEventOccured; 
             }
         }
     }
-    public static void Stop()
+    public void Stop()
     {
-        if (s_lifetimeObserver != null)
+        if (_lifetimeObserver != null)
         {
-            s_lifetimeObserver!.LifetimeEventOccured -= LifetimeObserver_LifetimeEventOccured;
+            _lifetimeObserver!.LifetimeEventOccured -= LifetimeObserver_LifetimeEventOccured;
         }
-        s_running = false;
+        _running = false;
     }
-    private static void CurrentDomain_ProcessExit(object? sender, EventArgs e)
+    private void CurrentDomain_ProcessExit(object? sender, EventArgs e)
     {
 #if !NO_SOCKET
-        s_socket.Close();
+        _socket.Close();
 #endif
     }
-    private static void Echo_Exited(object? sender, EventArgs e)
+    private void Echo_Exited(object? sender, EventArgs e)
     {
         Stop();
     }
-    private static void LifetimeObserver_LifetimeEventOccured(object? sender, LifetimeEventArgs e)
+    private void LifetimeObserver_LifetimeEventOccured(object? sender, LifetimeEventArgs e)
     {
         lock (e.Type)
         {
-            CountHolder ch = s_counts[e.Type];
+            CountHolder ch = _counts[e.Type];
             switch (e.Kind)
             {
                 case LifetimeEventKind.Created:
@@ -97,17 +99,17 @@ public static class LifetimeVisualizer
         }
         Write();
     }
-    private static void S_lifetimeObserver_NextTracedCount(object? sender, EventArgs e)
+    private void S_lifetimeObserver_NextTracedCount(object? sender, EventArgs e)
     {
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive);
         GC.WaitForPendingFinalizers();
     }
-    private static void Write()
+    private void Write()
     {
-        string data = string.Join('\n', s_counts.Select(item =>
+        string data = string.Join('\n', _counts.Select(item =>
         {
             string line = string.Format(
-                $"{{0,-{s_maxNameLen}}}\t+{{1}}\t-{{2}}\t={{3}}\t<{{4}}", 
+                $"{{0,-{_maxNameLen}}}\t+{{1}}\t-{{2}}\t={{3}}\t<{{4}}", 
                 item.Key, item.Value._incCount, item.Value._decCount, 
                 item.Value._incCount - item.Value._decCount, item.Value._maxCount
             );
@@ -117,7 +119,7 @@ public static class LifetimeVisualizer
         string message = $"{data}\0";
         try
         {
-            s_socket.Send(Encoding.UTF8.GetBytes(message));
+            _socket.Send(Encoding.UTF8.GetBytes(message));
         }
         catch (Exception)
         {
