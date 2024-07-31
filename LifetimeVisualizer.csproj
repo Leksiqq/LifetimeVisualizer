@@ -21,7 +21,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/Leksiqq/LifetimeVisualizer/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Leksiqq/LifetimeVisualizer</RepositoryUrl>
-    <Version>1.3.0</Version>
+    <Version>1.3.5</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>lifetime garbage-collection memory-leaks</PackageTags>
     <Description>An utility for checking the release of objects.</Description>
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Release'">
-    <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.2.*" />
+    <PackageReference Include="Net.Leksi.LifetimeObserver" Version="1.3.*" />
   </ItemGroup>
   <Target Name="Copy1" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
     <PropertyGroup>

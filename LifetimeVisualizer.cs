@@ -7,12 +7,12 @@ namespace Net.Leksi.Util;
 public class LifetimeVisualizer
 {
     public static LifetimeVisualizer Instance = new();
-    private Dictionary<Type, CountHolder> _counts = [];
     private bool _running = false;
     private int _maxNameLen = 0;
     private LifetimeObserver? _lifetimeObserver = null;
     private Socket _socket = null!;
     private string _socketPath = null!;
+    private LifetimeGauge? _gauge = null;
     private LifetimeVisualizer() { }
     public void Start(LifetimeObserver lifetimeObserver)
     {
@@ -22,15 +22,12 @@ public class LifetimeVisualizer
             if (!_running)
             {
                 _running = true;
-                lock (_counts)
+                _gauge = new(lifetimeObserver);
+                foreach (Type type in _gauge!.GetTracedTypes())
                 {
-                    foreach (Type type in _lifetimeObserver!.GetTracedTypes())
+                    if (_maxNameLen < type.FullName!.Length)
                     {
-                        _counts.Add(type, new CountHolder());
-                        if (_maxNameLen < type.FullName!.Length)
-                        {
-                            _maxNameLen = type.FullName.Length;
-                        }
+                        _maxNameLen = type.FullName.Length;
                     }
                 }
                 _lifetimeObserver.NextTracedCount += S_lifetimeObserver_NextTracedCount;
@@ -56,17 +53,22 @@ public class LifetimeVisualizer
                 _socket.Connect(new UnixDomainSocketEndPoint(_socketPath));
 #endif
                 Write();
-                _lifetimeObserver.LifetimeEventOccured += LifetimeObserver_LifetimeEventOccured; 
+                _lifetimeObserver.LifetimeEventOccured += LifetimeObserver_LifetimeEventOccured;
             }
         }
     }
     public void Stop()
     {
-        if (_lifetimeObserver != null)
+        if(_gauge != null)
         {
-            _lifetimeObserver!.LifetimeEventOccured -= LifetimeObserver_LifetimeEventOccured;
+            _gauge.Stop();
         }
+        _lifetimeObserver!.LifetimeEventOccured -= LifetimeObserver_LifetimeEventOccured;
         _running = false;
+    }
+    private void LifetimeObserver_LifetimeEventOccured(object? sender, LifetimeEventArgs args)
+    {
+        Write();
     }
     private void CurrentDomain_ProcessExit(object? sender, EventArgs e)
     {
@@ -78,27 +80,6 @@ public class LifetimeVisualizer
     {
         Stop();
     }
-    private void LifetimeObserver_LifetimeEventOccured(object? sender, LifetimeEventArgs e)
-    {
-        lock (e.Type)
-        {
-            CountHolder ch = _counts[e.Type];
-            switch (e.Kind)
-            {
-                case LifetimeEventKind.Created:
-                    ++ch._incCount;
-                    if(ch._incCount - ch._decCount > ch._maxCount)
-                    {
-                        ch._maxCount = ch._incCount - ch._decCount;
-                    }
-                    break;
-                case LifetimeEventKind.Finalized:
-                    ++ch._decCount;
-                    break;
-            };
-        }
-        Write();
-    }
     private void S_lifetimeObserver_NextTracedCount(object? sender, EventArgs e)
     {
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive);
@@ -106,12 +87,13 @@ public class LifetimeVisualizer
     }
     private void Write()
     {
-        string data = string.Join('\n', _counts.Select(item =>
+        string data = string.Join('\n', _gauge!.GetTracedTypes().Select(item =>
         {
+            (int created, int released, int waterMark) = _gauge.GetCounts(item);
             string line = string.Format(
-                $"{{0,-{_maxNameLen}}}\t+{{1}}\t-{{2}}\t={{3}}\t<{{4}}", 
-                item.Key, item.Value._incCount, item.Value._decCount, 
-                item.Value._incCount - item.Value._decCount, item.Value._maxCount
+                $"{{0,-{_maxNameLen}}}\t+{{1}}\t-{{2}}\t={{3}}\t<{{4}}\t%{{5:f2}}", 
+                item, created, released,
+                created - released, waterMark, created > 0 ? 100.0 * waterMark / created : "-"
             );
             return $"{line}";
         })) + "\n";
@@ -129,10 +111,4 @@ public class LifetimeVisualizer
         Console.Write(data);
 #endif
     }
-}
-internal class CountHolder
-{
-    internal int _incCount = 0;
-    internal int _decCount = 0;
-    internal int _maxCount = 0;
 }
