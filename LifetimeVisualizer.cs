@@ -93,7 +93,7 @@ public class LifetimeVisualizer
             string line = string.Format(
                 $"{{0,-{_maxNameLen}}}\t+{{1}}\t-{{2}}\t={{3}}\t<{{4}}\t%{{5:f2}}", 
                 item, created, released,
-                created - released, waterMark, created > 0 ? 100.0 * waterMark / created : "-"
+                created - released, waterMark, created > 0 ? 100.0 * (created - released) / created : "-"
             );
             return $"{line}";
         })) + "\n";
